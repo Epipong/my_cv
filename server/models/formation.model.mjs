@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 // Define the Formation schema
 const formationSchema = new mongoose.Schema({
@@ -17,4 +17,4 @@ const formationSchema = new mongoose.Schema({
 })
 // Create the Formation model from the schema
 const Formation = mongoose.model('Formation', formationSchema);
-module.exports = Formation;
+export default Formation;

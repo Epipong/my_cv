@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 // Define the Hobby schema
 const hobbySchema = new mongoose.Schema({
@@ -8,4 +8,4 @@ const hobbySchema = new mongoose.Schema({
 })
 // Create the Hobby model from the schema
 const Hobby = mongoose.model('Hobby', hobbySchema);
-module.exports = Hobby;
+export default Hobby;
