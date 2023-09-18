@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
+import { Schema, mongoose } from 'mongoose';
 
 // Define the Language schema
-const languageSchema = new mongoose.Schema({
+const languageSchema = new Schema({
     name: {
         type: String
     },

@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
+import { Schema, mongoose } from 'mongoose';
 
 // Define the Experience schema
-const experienceSchema = new mongoose.Schema({
+const experienceSchema = new Schema({
 	period: {
         type: String,
         required: true

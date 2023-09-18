@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
+import { Schema, mongoose } from 'mongoose';
 
 // Define the Skill schema
-const skillSchema = new mongoose.Schema({
+const skillSchema = new Schema({
     content: {
         type: String
     }

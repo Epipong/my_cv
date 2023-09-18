@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
+import { Schema, mongoose } from 'mongoose';
 
 // Define the Hobby schema
-const hobbySchema = new mongoose.Schema({
+const hobbySchema = new Schema({
     text: {
         type: String
     }

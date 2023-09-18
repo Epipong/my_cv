@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import { Schema, mongoose } from 'mongoose';
 
 import Contact from './contact.model.mjs';
 import Experience from './experience.model.mjs';
@@ -8,7 +8,7 @@ import Language from './language.model.mjs';
 import Skill from './skill.model.mjs';
 
 // Define the User schema
-const userSchema = new mongoose.Schema({
+const userSchema = new Schema({
     contact: {
         type: Contact.schema,
         required: true
@@ -25,12 +25,12 @@ const userSchema = new mongoose.Schema({
         type: [Experience.schema],
         required: true
     },
-    formation: {
+    formations: {
         type: [Formation.schema],
         required: true
     },
     hobbies: {
-        type: [Hobby.schema]
+        type: Hobby.schema
     }
 })
 // Create the User model from the schema

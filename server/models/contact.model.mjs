@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
+import { Schema, mongoose } from 'mongoose';
 
 // Define the Contact schema
-const contactSchema = new mongoose.Schema({
+const contactSchema = new Schema({
     phone: {
         type: String,
         required: true,

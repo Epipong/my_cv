@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
+import { Schema, mongoose } from 'mongoose';
 
 // Define the Formation schema
-const formationSchema = new mongoose.Schema({
+const formationSchema = new Schema({
 	period: {
         type: String,
         required: true
