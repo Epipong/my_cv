@@ -13,8 +13,8 @@ app.use(express.json());
 // Load the /posts routes
 app.use("/users", users);
 
-app.use((err, _req, res, next) => {
-    console.log(err);
+app.use((err, _req, res, _next) => {
+    console.error(err);
     res.status(500).send(err)
 })
 
