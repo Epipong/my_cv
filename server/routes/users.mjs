@@ -50,7 +50,7 @@ router.put("/:id/contacts", async (req, res) => {
     const updates = {
         $set: { contact: req.body }
     };
-    let result = await User.updateOne(query, updates);
+    let result = await User.updateOne({ 'contact._id': ObjectId(user.contact._id) }, updates);
 
     res.send(result).status(200);
 });
@@ -297,6 +297,32 @@ router.delete("/:id/formations/:formation_id", async (req, res) => {
         $set: { formations: user.formations }
     }
     let result = await User.updateOne(query, updates);
+
+    res.send(result).status(200);
+});
+
+// Read hobby
+router.get("/:id/hobbies", async (req, res) => {
+    const query = { _id: ObjectId(req.params.id) };
+    let user = await User.findOne(query);
+    if (!user) {
+        return res.send("User Not found!").status(404);
+    }
+
+    res.send(user.hobbies).status(200);
+})
+
+// Update hobby
+router.put("/:id/hobbies", async (req, res) => {
+    const query = { _id: ObjectId(req.params.id) };
+    let user = await User.findOne(query);
+    if (!user) {
+        return res.send("User Not found!").status(404);
+    }
+    const updates = {
+        $set: { hobbies: req.body }
+    };
+    let result = await User.updateOne({ 'hobbies._id': ObjectId(user.hobbies._id) }, updates);
 
     res.send(result).status(200);
 });
