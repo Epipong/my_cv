@@ -224,7 +224,7 @@ router.put("/:id/experiences/:experience_id", async (req, res) => {
     res.send(result).status(200);
 });
 
-// Delete an entry
+// Delete an experience
 router.delete("/:id/experiences/:experience_id", async (req, res) => {
     const query = { _id: ObjectId(req.params.id) };
     let user = await User.findOne(query);
@@ -234,6 +234,67 @@ router.delete("/:id/experiences/:experience_id", async (req, res) => {
     user.experiences.pull({ _id: ObjectId(req.params.experience_id) });
     const updates = {
         $set: { experiences: user.experiences }
+    }
+    let result = await User.updateOne(query, updates);
+
+    res.send(result).status(200);
+});
+
+// Read all formations
+router.get("/:id/formations", async (req, res) => {
+    const query = { _id: ObjectId(req.params.id) };
+    let user = await User.findOne(query);
+    if (!user) {
+        return res.send("User Not found!").status(404);
+    }
+
+    res.send(user.formations).status(200);
+});
+
+// Add a new formation to the collection
+router.post("/:id/formations", async (req, res) => {
+    const query = { _id: ObjectId(req.params.id) };
+    let user = await User.findOne(query);
+    if (!user) {
+        return res.send("User Not found!").status(404);
+    }
+    const updates = {
+        $push: { formations: req.body }
+    };
+    let result = await User.updateOne(query, updates);
+
+    res.send(result).status(200);
+});
+
+// Update formation
+router.put("/:id/formations/:formation_id", async (req, res) => {
+    const query = { _id: ObjectId(req.params.id) };
+    let user = await User.findOne(query);
+    if (!user) {
+        return res.send("User Not found!").status(404);
+    }
+    const updates = {
+        $set: {
+            'formations.$.period': req.body.period,
+            'formations.$.title': req.body.title,
+            'formations.$.school': req.body.school
+        }
+    };
+    let result = await User.updateOne({ 'formations._id': ObjectId(req.params.formation_id) }, updates);
+
+    res.send(result).status(200);
+});
+
+// Delete a formation
+router.delete("/:id/formations/:formation_id", async (req, res) => {
+    const query = { _id: ObjectId(req.params.id) };
+    let user = await User.findOne(query);
+    if (!user) {
+        return res.send("User Not found!").status(404);
+    }
+    user.formations.pull({ _id: ObjectId(req.params.formation_id) });
+    const updates = {
+        $set: { formations: user.formations }
     }
     let result = await User.updateOne(query, updates);
 
