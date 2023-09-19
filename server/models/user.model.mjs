@@ -29,7 +29,8 @@ const skillSchema = new Schema({
 // Define the Language schema
 const languageSchema = new Schema({
     name: {
-        type: String
+        type: String,
+        unique: true
     },
     level: {
         type: String
