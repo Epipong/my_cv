@@ -17,20 +17,20 @@ The REST API to my_cv app is described below.
 
 ## Requests
 
-### Get list of Users
-`GET /users`
+### Get list of Resumes
+`GET /resumes`
 
-    curl --location 'localhost:3000/users'
+    curl --location 'localhost:3000/resumes'
 
-### Get a specific User
-`GET /users/:id`
+### Get a specific Resume
+`GET /resumes/:id`
 
-    curl --location 'localhost:3000/users/1'
+    curl --location 'localhost:3000/resumes/1'
 
-### Create a new User
-`POST /users`
+### Create a new Resume
+`POST /resumes`
 ```sh
-curl --location 'localhost:3000/users' \
+curl --location 'localhost:3000/resumes' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "contact": {
@@ -41,8 +41,8 @@ curl --location 'localhost:3000/users' \
 }'
 ```
 
-### Delete a User
+### Delete a Resume
 `DELETE /user/:id`
 
-    curl --location --request DELETE 'localhost:3000/users/1'
+    curl --location --request DELETE 'localhost:3000/resumes/1'
 

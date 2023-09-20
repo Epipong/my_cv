@@ -1,13 +1,13 @@
 import express from "express";
 import { ObjectId } from "mongodb";
 import '../db/conn.mjs';
-import User from '../models/user.model.mjs';
+import Resume from '../models/resume.model.mjs';
 
 const router = express.Router();
 
-// Get a list of 50 users
+// Get a list of 50 resumes
 router.get("/", async (_req, res) => {
-    let results = await User.collection.find({})
+    let results = await Resume.collection.find({})
         .limit(50)
         .toArray();
     res.send(results).status(200);
@@ -15,15 +15,15 @@ router.get("/", async (_req, res) => {
 
 // Add a new document to the collection
 router.post("/", async (req, res) => {
-    let newUser = new User(req.body);
-    let result = await User.collection.insertOne(newUser);
+    let newResume = new Resume(req.body);
+    let result = await Resume.collection.insertOne(newResume);
     res.send(result).status(204);
 });
 
-// Get user by id
+// Get resume by id
 router.get("/:id", async (req, res) => {
     let query = { _id: ObjectId(req.params.id) };
-    let result = await User.findOne(query);
+    let result = await Resume.findOne(query);
     if (!result) {
         res.send("Not found!").status(404);
     } else {
@@ -35,22 +35,22 @@ router.get("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
     const query = { _id: ObjectId(req.params.id) };
 
-    let result = await User.deleteOne(query);
+    let result = await Resume.deleteOne(query);
 
     res.send(result).status(200);
 });
 
-// Update contact from user
+// Update contact from resume
 router.put("/:id/contacts", async (req, res) => {
     const query = { _id: ObjectId(req.params.id) };
-    let user = await User.findOne(query);
-    if (!user) {
-        return res.send("User Not found!").status(404);
+    let resume = await Resume.findOne(query);
+    if (!resume) {
+        return res.send("Resume Not found!").status(404);
     }
     const updates = {
         $set: { contact: req.body }
     };
-    let result = await User.updateOne({ 'contact._id': ObjectId(user.contact._id) }, updates);
+    let result = await Resume.updateOne({ 'contact._id': ObjectId(resume.contact._id) }, updates);
 
     res.send(result).status(200);
 });
@@ -58,25 +58,25 @@ router.put("/:id/contacts", async (req, res) => {
 // Read all skills
 router.get("/:id/skills", async (req, res) => {
     const query = { _id: ObjectId(req.params.id) };
-    let user = await User.findOne(query);
-    if (!user) {
-        return res.send("User Not found!").status(404);
+    let resume = await Resume.findOne(query);
+    if (!resume) {
+        return res.send("Resume Not found!").status(404);
     }
 
-    res.send(user.skills).status(200);
+    res.send(resume.skills).status(200);
 });
 
 // Add a new skill to the collection
 router.post("/:id/skills", async (req, res) => {
     const query = { _id: ObjectId(req.params.id) };
-    let user = await User.findOne(query);
-    if (!user) {
-        return res.send("User Not found!").status(404);
+    let resume = await Resume.findOne(query);
+    if (!resume) {
+        return res.send("Resume Not found!").status(404);
     }
     const updates = {
         $push: { skills: req.body }
     };
-    let result = await User.updateOne(query, updates);
+    let result = await Resume.updateOne(query, updates);
 
     res.send(result).status(200);
 });
@@ -84,14 +84,14 @@ router.post("/:id/skills", async (req, res) => {
 // Update skill
 router.put("/:id/skills/:skill_id", async (req, res) => {
     const query = { _id: ObjectId(req.params.id) };
-    let user = await User.findOne(query);
-    if (!user) {
-        return res.send("User Not found!").status(404);
+    let resume = await Resume.findOne(query);
+    if (!resume) {
+        return res.send("Resume Not found!").status(404);
     }
     const updates = {
         $set: { 'skills.$.content': req.body.content }
     };
-    let result = await User.updateOne({ 'skills._id': ObjectId(req.params.skill_id) }, updates);
+    let result = await Resume.updateOne({ 'skills._id': ObjectId(req.params.skill_id) }, updates);
 
     res.send(result).status(200);
 });
@@ -99,15 +99,15 @@ router.put("/:id/skills/:skill_id", async (req, res) => {
 // Delete a skill
 router.delete("/:id/skills/:skill_id", async (req, res) => {
     const query = { _id: ObjectId(req.params.id) };
-    let user = await User.findOne(query);
-    if (!user) {
-        return res.send("User Not found!").status(404);
+    let resume = await Resume.findOne(query);
+    if (!resume) {
+        return res.send("Resume Not found!").status(404);
     }
-    user.skills.pull({ _id: ObjectId(req.params.skill_id) });
+    resume.skills.pull({ _id: ObjectId(req.params.skill_id) });
     const updates = {
-        $set: { skills: user.skills }
+        $set: { skills: resume.skills }
     }
-    let result = await User.updateOne(query, updates);
+    let result = await Resume.updateOne(query, updates);
 
     res.send(result).status(200);
 });
@@ -115,25 +115,27 @@ router.delete("/:id/skills/:skill_id", async (req, res) => {
 // Read all languages
 router.get("/:id/languages", async (req, res) => {
     const query = { _id: ObjectId(req.params.id) };
-    let user = await User.findOne(query);
-    if (!user) {
-        return res.send("User Not found!").status(404);
+    let resume = await Resume.findOne(query);
+    if (!resume) {
+        return res.send("Resume Not found!").status(404);
     }
 
-    res.send(user.languages).status(200);
+    res.send(resume.languages).status(200);
 });
 
 // Add a new language to the collection
 router.post("/:id/languages", async (req, res) => {
-    let query = { _id: ObjectId(req.params.id), 'languages.name': { $ne: req.body.name } };
-    let user = await User.findOne(query);
-    if (!user) {
-        return res.send("User Not found!").status(404);
+    let query = { _id: ObjectId(req.params.id) };
+    let resume = await Resume.findOne(query);
+    if (!resume) {
+        return res.send("Resume Not found!").status(404);
+    } else if (resume.languages.filter((l) => l.name === req.body.name).length) {
+        return res.send("Language already exists!").status(400);
     }
     const updates = {
         $push: { languages: req.body }
     };
-    let result = await User.updateOne(query, updates);
+    let result = await Resume.updateOne(query, updates);
 
     res.send(result).status(200);
 });
@@ -141,11 +143,11 @@ router.post("/:id/languages", async (req, res) => {
 // Update language
 router.put("/:id/languages/:language_id", async (req, res) => {
     const query = { _id: ObjectId(req.params.id) };
-    let user = await User.findOne(query);
-    if (!user) {
-        return res.send("User Not found!").status(404);
-    } else if (req.body.name != new User(user).languages.id(req.params.language_id).name) {
-        if (user.languages.filter((l) => l.name === req.body.name).length) {
+    let resume = await Resume.findOne(query);
+    if (!resume) {
+        return res.send("Resume Not found!").status(404);
+    } else if (req.body.name != new Resume(resume).languages.id(req.params.language_id).name) {
+        if (resume.languages.filter(l => l.name === req.body.name).length) {
             return res.send("Language already exists!").status(400);
         }
     }
@@ -155,7 +157,7 @@ router.put("/:id/languages/:language_id", async (req, res) => {
             'languages.$.level': req.body.level
         }
     };
-    let result = await User.updateOne({ 'languages._id': ObjectId(req.params.language_id) }, updates);
+    let result = await Resume.updateOne({ 'languages._id': ObjectId(req.params.language_id) }, updates);
 
     res.send(result).status(200);
 });
@@ -163,15 +165,15 @@ router.put("/:id/languages/:language_id", async (req, res) => {
 // Delete a language
 router.delete("/:id/languages/:language_id", async (req, res) => {
     const query = { _id: ObjectId(req.params.id) };
-    let user = await User.findOne(query);
-    if (!user) {
-        return res.send("User Not found!").status(404);
+    let resume = await Resume.findOne(query);
+    if (!resume) {
+        return res.send("Resume Not found!").status(404);
     }
-    user.languages.pull({ _id: ObjectId(req.params.language_id) });
+    resume.languages.pull({ _id: ObjectId(req.params.language_id) });
     const updates = {
-        $set: { languages: user.languages }
+        $set: { languages: resume.languages }
     }
-    let result = await User.updateOne(query, updates);
+    let result = await Resume.updateOne(query, updates);
 
     res.send(result).status(200);
 });
@@ -179,25 +181,25 @@ router.delete("/:id/languages/:language_id", async (req, res) => {
 // Read all experiences
 router.get("/:id/experiences", async (req, res) => {
     const query = { _id: ObjectId(req.params.id) };
-    let user = await User.findOne(query);
-    if (!user) {
-        return res.send("User Not found!").status(404);
+    let resume = await Resume.findOne(query);
+    if (!resume) {
+        return res.send("Resume Not found!").status(404);
     }
 
-    res.send(user.experiences).status(200);
+    res.send(resume.experiences).status(200);
 });
 
 // Add a new experience to the collection
 router.post("/:id/experiences", async (req, res) => {
     const query = { _id: ObjectId(req.params.id) };
-    let user = await User.findOne(query);
-    if (!user) {
-        return res.send("User Not found!").status(404);
+    let resume = await Resume.findOne(query);
+    if (!resume) {
+        return res.send("Resume Not found!").status(404);
     }
     const updates = {
         $push: { experiences: req.body }
     };
-    let result = await User.updateOne(query, updates);
+    let result = await Resume.updateOne(query, updates);
 
     res.send(result).status(200);
 });
@@ -205,9 +207,9 @@ router.post("/:id/experiences", async (req, res) => {
 // Update experience
 router.put("/:id/experiences/:experience_id", async (req, res) => {
     const query = { _id: ObjectId(req.params.id) };
-    let user = await User.findOne(query);
-    if (!user) {
-        return res.send("User Not found!").status(404);
+    let resume = await Resume.findOne(query);
+    if (!resume) {
+        return res.send("Resume Not found!").status(404);
     }
     const updates = {
         $set: {
@@ -219,7 +221,7 @@ router.put("/:id/experiences/:experience_id", async (req, res) => {
             'experiences.$.stack': req.body.stack
         }
     };
-    let result = await User.updateOne({ 'experiences._id': ObjectId(req.params.experience_id) }, updates);
+    let result = await Resume.updateOne({ 'experiences._id': ObjectId(req.params.experience_id) }, updates);
 
     res.send(result).status(200);
 });
@@ -227,15 +229,15 @@ router.put("/:id/experiences/:experience_id", async (req, res) => {
 // Delete an experience
 router.delete("/:id/experiences/:experience_id", async (req, res) => {
     const query = { _id: ObjectId(req.params.id) };
-    let user = await User.findOne(query);
-    if (!user) {
-        return res.send("User Not found!").status(404);
+    let resume = await Resume.findOne(query);
+    if (!resume) {
+        return res.send("Resume Not found!").status(404);
     }
-    user.experiences.pull({ _id: ObjectId(req.params.experience_id) });
+    resume.experiences.pull({ _id: ObjectId(req.params.experience_id) });
     const updates = {
-        $set: { experiences: user.experiences }
+        $set: { experiences: resume.experiences }
     }
-    let result = await User.updateOne(query, updates);
+    let result = await Resume.updateOne(query, updates);
 
     res.send(result).status(200);
 });
@@ -243,25 +245,25 @@ router.delete("/:id/experiences/:experience_id", async (req, res) => {
 // Read all formations
 router.get("/:id/formations", async (req, res) => {
     const query = { _id: ObjectId(req.params.id) };
-    let user = await User.findOne(query);
-    if (!user) {
-        return res.send("User Not found!").status(404);
+    let resume = await Resume.findOne(query);
+    if (!resume) {
+        return res.send("Resume Not found!").status(404);
     }
 
-    res.send(user.formations).status(200);
+    res.send(resume.formations).status(200);
 });
 
 // Add a new formation to the collection
 router.post("/:id/formations", async (req, res) => {
     const query = { _id: ObjectId(req.params.id) };
-    let user = await User.findOne(query);
-    if (!user) {
-        return res.send("User Not found!").status(404);
+    let resume = await Resume.findOne(query);
+    if (!resume) {
+        return res.send("Resume Not found!").status(404);
     }
     const updates = {
         $push: { formations: req.body }
     };
-    let result = await User.updateOne(query, updates);
+    let result = await Resume.updateOne(query, updates);
 
     res.send(result).status(200);
 });
@@ -269,9 +271,9 @@ router.post("/:id/formations", async (req, res) => {
 // Update formation
 router.put("/:id/formations/:formation_id", async (req, res) => {
     const query = { _id: ObjectId(req.params.id) };
-    let user = await User.findOne(query);
-    if (!user) {
-        return res.send("User Not found!").status(404);
+    let resume = await Resume.findOne(query);
+    if (!resume) {
+        return res.send("Resume Not found!").status(404);
     }
     const updates = {
         $set: {
@@ -280,7 +282,7 @@ router.put("/:id/formations/:formation_id", async (req, res) => {
             'formations.$.school': req.body.school
         }
     };
-    let result = await User.updateOne({ 'formations._id': ObjectId(req.params.formation_id) }, updates);
+    let result = await Resume.updateOne({ 'formations._id': ObjectId(req.params.formation_id) }, updates);
 
     res.send(result).status(200);
 });
@@ -288,15 +290,15 @@ router.put("/:id/formations/:formation_id", async (req, res) => {
 // Delete a formation
 router.delete("/:id/formations/:formation_id", async (req, res) => {
     const query = { _id: ObjectId(req.params.id) };
-    let user = await User.findOne(query);
-    if (!user) {
-        return res.send("User Not found!").status(404);
+    let resume = await Resume.findOne(query);
+    if (!resume) {
+        return res.send("Resume Not found!").status(404);
     }
-    user.formations.pull({ _id: ObjectId(req.params.formation_id) });
+    resume.formations.pull({ _id: ObjectId(req.params.formation_id) });
     const updates = {
-        $set: { formations: user.formations }
+        $set: { formations: resume.formations }
     }
-    let result = await User.updateOne(query, updates);
+    let result = await Resume.updateOne(query, updates);
 
     res.send(result).status(200);
 });
@@ -304,25 +306,25 @@ router.delete("/:id/formations/:formation_id", async (req, res) => {
 // Read hobby
 router.get("/:id/hobbies", async (req, res) => {
     const query = { _id: ObjectId(req.params.id) };
-    let user = await User.findOne(query);
-    if (!user) {
-        return res.send("User Not found!").status(404);
+    let resume = await Resume.findOne(query);
+    if (!resume) {
+        return res.send("Resume Not found!").status(404);
     }
 
-    res.send(user.hobbies).status(200);
+    res.send(resume.hobbies).status(200);
 })
 
 // Update hobby
 router.put("/:id/hobbies", async (req, res) => {
     const query = { _id: ObjectId(req.params.id) };
-    let user = await User.findOne(query);
-    if (!user) {
-        return res.send("User Not found!").status(404);
+    let resume = await Resume.findOne(query);
+    if (!resume) {
+        return res.send("Resume Not found!").status(404);
     }
     const updates = {
         $set: { hobbies: req.body }
     };
-    let result = await User.updateOne({ 'hobbies._id': ObjectId(user.hobbies._id) }, updates);
+    let result = await Resume.updateOne({ 'hobbies._id': ObjectId(resume.hobbies._id) }, updates);
 
     res.send(result).status(200);
 });
