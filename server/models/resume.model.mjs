@@ -1,4 +1,5 @@
 import { Schema, mongoose } from 'mongoose';
+import arrayUniquePlugin from 'mongoose-unique-array';
 
 // Define the Contact schema
 const contactSchema = new Schema({
@@ -21,7 +22,8 @@ const contactSchema = new Schema({
 // Define the Skill schema
 const skillSchema = new Schema({
     content: {
-        type: String
+        type: String,
+        required: true
     }
 })
 
@@ -30,6 +32,7 @@ const skillSchema = new Schema({
 const languageSchema = new Schema({
     name: {
         type: String,
+        required: true,
         unique: true
     },
     level: {
@@ -86,8 +89,8 @@ const hobbySchema = new Schema({
     }
 })
 
-// Define the User schema
-const userSchema = new Schema({
+// Define the Resume schema
+const resumeSchema = new Schema({
     contact: {
         type: contactSchema,
         required: true
@@ -112,7 +115,8 @@ const userSchema = new Schema({
         type: hobbySchema
     }
 })
-// Create the User model from the schema
-const User = mongoose.model('User', userSchema);
+resumeSchema.plugin(arrayUniquePlugin);
+// Create the Resume model from the schema
+const Resume = mongoose.model('Resume', resumeSchema);
 
-export default User;
+export default Resume;
