@@ -1,4 +1,5 @@
 import { Schema, mongoose } from 'mongoose';
+import arrayUniquePlugin from 'mongoose-unique-array';
 
 // Define the Contact schema
 const contactSchema = new Schema({
@@ -114,6 +115,7 @@ const resumeSchema = new Schema({
         type: hobbySchema
     }
 })
+resumeSchema.plugin(arrayUniquePlugin);
 // Create the Resume model from the schema
 const Resume = mongoose.model('Resume', resumeSchema);
 
