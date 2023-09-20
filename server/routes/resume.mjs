@@ -70,46 +70,46 @@ router.get("/:id/skills", async (req, res) => {
 router.post("/:id/skills", async (req, res) => {
     const query = { _id: ObjectId(req.params.id) };
     let resume = await Resume.findOne(query);
-    if (!resume) {
-        return res.send({ errors: "Resume not found" }).status(404);
-    }
-    const updates = {
-        $push: { skills: req.body }
-    };
-    let result = await Resume.updateOne(query, updates);
 
-    res.send(result).status(200);
+    resume.skills.push(req.body);
+    await resume.save()
+        .then(resume => {
+            res.send(resume.skills).status(200);
+        }).catch(err => {
+            res.status(500).send(err);
+        });
 });
 
 // Update skill
 router.put("/:id/skills/:skill_id", async (req, res) => {
     const query = { _id: ObjectId(req.params.id) };
     let resume = await Resume.findOne(query);
-    if (!resume) {
-        return res.send({ errors: "Resume not found" }).status(404);
-    }
-    const updates = {
-        $set: { 'skills.$.content': req.body.content }
-    };
-    let result = await Resume.updateOne({ 'skills._id': ObjectId(req.params.skill_id) }, updates);
 
-    res.send(result).status(200);
+    resume.skills.map(skill => {
+        if (skill._id == req.params.skill_id)
+            skill.content = req.body.content;
+        return skill;
+    });
+    await resume.save()
+        .then(resume => {
+            res.send(resume.skills).status(200);
+        }).catch(err => {
+            res.status(500).send(err);
+        });
 });
 
 // Delete a skill
 router.delete("/:id/skills/:skill_id", async (req, res) => {
     const query = { _id: ObjectId(req.params.id) };
     let resume = await Resume.findOne(query);
-    if (!resume) {
-        return res.send({ errors: "Resume not found" }).status(404);
-    }
-    resume.skills.pull({ _id: ObjectId(req.params.skill_id) });
-    const updates = {
-        $set: { skills: resume.skills }
-    }
-    let result = await Resume.updateOne(query, updates);
 
-    res.send(result).status(200);
+    resume.skills.pull({ _id: ObjectId(req.params.skill_id) });
+    await resume.save()
+        .then(resume => {
+            res.send(resume.skills).status(200);
+        }).catch(err => {
+            res.status(500).send(err);
+        });
 });
 
 // Read all languages
