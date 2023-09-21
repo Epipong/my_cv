@@ -6,15 +6,18 @@ import Resume from '../models/resume.model.mjs';
 const router = express.Router();
 
 // Get a list of 50 resumes
-router.get("/", async (_req, res) => {
+router.get("/", async (req, res) => {
+    console.info(`${req.method} ${req.url}`);
     let results = await Resume.collection.find({})
-        .limit(50)
         .toArray();
+    res.set('Access-Control-Expose-Headers', 'X-Total-Count');
+    res.set('X-Total-Count', results.length);
     res.send(results).status(200);
 });
 
 // Add a new document to the collection
 router.post("/", async (req, res) => {
+    console.info(`${req.method} ${req.url}`);
     let newResume = new Resume(req.body);
     let result = await Resume.collection.insertOne(newResume);
     res.send(result).status(204);
@@ -22,6 +25,7 @@ router.post("/", async (req, res) => {
 
 // Get resume by id
 router.get("/:id", async (req, res) => {
+    console.info(`${req.method} ${req.url}`);
     let query = { _id: ObjectId(req.params.id) };
     let result = await Resume.findOne(query);
     if (!result) {
@@ -33,6 +37,7 @@ router.get("/:id", async (req, res) => {
 
 // Delete contact
 router.delete("/:id", async (req, res) => {
+    console.info(`${req.method} ${req.url}`);
     const query = { _id: ObjectId(req.params.id) };
 
     let result = await Resume.deleteOne(query);
@@ -42,6 +47,7 @@ router.delete("/:id", async (req, res) => {
 
 // Update contact from resume
 router.put("/:id/contacts", async (req, res) => {
+    console.info(`${req.method} ${req.url}`);
     const query = { _id: ObjectId(req.params.id) };
     let resume = await Resume.findOne(query);
     if (!resume) {
@@ -57,6 +63,7 @@ router.put("/:id/contacts", async (req, res) => {
 
 // Read all skills
 router.get("/:id/skills", async (req, res) => {
+    console.info(`${req.method} ${req.url}`);
     const query = { _id: ObjectId(req.params.id) };
     let resume = await Resume.findOne(query);
     if (!resume) {
@@ -68,6 +75,7 @@ router.get("/:id/skills", async (req, res) => {
 
 // Add a new skill to the collection
 router.post("/:id/skills", async (req, res) => {
+    console.info(`${req.method} ${req.url}`);
     const query = { _id: ObjectId(req.params.id) };
     let resume = await Resume.findOne(query);
 
@@ -82,6 +90,7 @@ router.post("/:id/skills", async (req, res) => {
 
 // Update skill
 router.put("/:id/skills/:skill_id", async (req, res) => {
+    console.info(`${req.method} ${req.url}`);
     const query = { _id: ObjectId(req.params.id) };
     let resume = await Resume.findOne(query);
 
@@ -100,6 +109,7 @@ router.put("/:id/skills/:skill_id", async (req, res) => {
 
 // Delete a skill
 router.delete("/:id/skills/:skill_id", async (req, res) => {
+    console.info(`${req.method} ${req.url}`);
     const query = { _id: ObjectId(req.params.id) };
     let resume = await Resume.findOne(query);
 
@@ -114,6 +124,7 @@ router.delete("/:id/skills/:skill_id", async (req, res) => {
 
 // Read all languages
 router.get("/:id/languages", async (req, res) => {
+    console.info(`${req.method} ${req.url}`);
     const query = { _id: ObjectId(req.params.id) };
     let resume = await Resume.findOne(query);
     if (!resume) {
@@ -125,6 +136,7 @@ router.get("/:id/languages", async (req, res) => {
 
 // Add a new language to the collection
 router.post("/:id/languages", async (req, res) => {
+    console.info(`${req.method} ${req.url}`);
     const query = { _id: ObjectId(req.params.id) };
     let resume = await Resume.findOne(query);
 
@@ -139,6 +151,7 @@ router.post("/:id/languages", async (req, res) => {
 
 // Update language
 router.put("/:id/languages/:language_id", async (req, res) => {
+    console.info(`${req.method} ${req.url}`);
     const query = { _id: ObjectId(req.params.id) };
     let resume = await Resume.findOne(query);
 
@@ -159,6 +172,7 @@ router.put("/:id/languages/:language_id", async (req, res) => {
 
 // Delete a language
 router.delete("/:id/languages/:language_id", async (req, res) => {
+    console.info(`${req.method} ${req.url}`);
     const query = { _id: ObjectId(req.params.id) };
     let resume = await Resume.findOne(query);
 
@@ -173,6 +187,7 @@ router.delete("/:id/languages/:language_id", async (req, res) => {
 
 // Read all experiences
 router.get("/:id/experiences", async (req, res) => {
+    console.info(`${req.method} ${req.url}`);
     const query = { _id: ObjectId(req.params.id) };
     let resume = await Resume.findOne(query);
     if (!resume) {
@@ -184,6 +199,7 @@ router.get("/:id/experiences", async (req, res) => {
 
 // Add a new experience to the collection
 router.post("/:id/experiences", async (req, res) => {
+    console.info(`${req.method} ${req.url}`);
     const query = { _id: ObjectId(req.params.id) };
     let resume = await Resume.findOne(query);
     if (!resume) {
@@ -199,6 +215,7 @@ router.post("/:id/experiences", async (req, res) => {
 
 // Update experience
 router.put("/:id/experiences/:experience_id", async (req, res) => {
+    console.info(`${req.method} ${req.url}`);
     const query = { _id: ObjectId(req.params.id) };
     let resume = await Resume.findOne(query);
     if (!resume) {
@@ -221,6 +238,7 @@ router.put("/:id/experiences/:experience_id", async (req, res) => {
 
 // Delete an experience
 router.delete("/:id/experiences/:experience_id", async (req, res) => {
+    console.info(`${req.method} ${req.url}`);
     const query = { _id: ObjectId(req.params.id) };
     let resume = await Resume.findOne(query);
     if (!resume) {
@@ -237,6 +255,7 @@ router.delete("/:id/experiences/:experience_id", async (req, res) => {
 
 // Read all formations
 router.get("/:id/formations", async (req, res) => {
+    console.info(`${req.method} ${req.url}`);
     const query = { _id: ObjectId(req.params.id) };
     let resume = await Resume.findOne(query);
     if (!resume) {
@@ -248,6 +267,7 @@ router.get("/:id/formations", async (req, res) => {
 
 // Add a new formation to the collection
 router.post("/:id/formations", async (req, res) => {
+    console.info(`${req.method} ${req.url}`);
     const query = { _id: ObjectId(req.params.id) };
     let resume = await Resume.findOne(query);
     if (!resume) {
@@ -263,6 +283,7 @@ router.post("/:id/formations", async (req, res) => {
 
 // Update formation
 router.put("/:id/formations/:formation_id", async (req, res) => {
+    console.info(`${req.method} ${req.url}`);
     const query = { _id: ObjectId(req.params.id) };
     let resume = await Resume.findOne(query);
     if (!resume) {
@@ -282,6 +303,7 @@ router.put("/:id/formations/:formation_id", async (req, res) => {
 
 // Delete a formation
 router.delete("/:id/formations/:formation_id", async (req, res) => {
+    console.info(`${req.method} ${req.url}`);
     const query = { _id: ObjectId(req.params.id) };
     let resume = await Resume.findOne(query);
     if (!resume) {
@@ -298,6 +320,7 @@ router.delete("/:id/formations/:formation_id", async (req, res) => {
 
 // Read hobby
 router.get("/:id/hobbies", async (req, res) => {
+    console.info(`${req.method} ${req.url}`);
     const query = { _id: ObjectId(req.params.id) };
     let resume = await Resume.findOne(query);
     if (!resume) {
@@ -309,6 +332,7 @@ router.get("/:id/hobbies", async (req, res) => {
 
 // Update hobby
 router.put("/:id/hobbies", async (req, res) => {
+    console.info(`${req.method} ${req.url}`);
     const query = { _id: ObjectId(req.params.id) };
     let resume = await Resume.findOne(query);
     if (!resume) {

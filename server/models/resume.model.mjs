@@ -3,6 +3,17 @@ import arrayUniquePlugin from 'mongoose-unique-array';
 
 // Define the Contact schema
 const contactSchema = new Schema({
+    firstname: {
+        type: String,
+        required: true
+    },
+    lastname: {
+        type: String,
+        required: true
+    },
+    title: {
+        type: String
+    },
     phone: {
         type: String,
         required: true,
@@ -16,6 +27,14 @@ const contactSchema = new Schema({
 	address: {
         type: String,
         required: true
+    },
+    website: {
+        url: {
+            type: String
+        },
+        text: {
+            type: String
+        }
     }
 })
 
