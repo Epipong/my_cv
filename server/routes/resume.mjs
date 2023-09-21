@@ -5,7 +5,7 @@ import Resume from '../models/resume.model.mjs';
 
 const router = express.Router();
 
-// Get a list of 50 resumes
+// Get a list of resumes
 router.get("/", async (req, res) => {
     console.info(`${req.method} ${req.url}`);
     let results = await Resume.collection.find({})
