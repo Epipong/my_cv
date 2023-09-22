@@ -7,17 +7,32 @@ const router = express.Router();
 
 // Get a list of users
 router.get("/", async (req, res) => {
-    console.info(`${req.method} ${req.url}`);
-    let results = await User.collection.find({})
+    let query = {};
+    if (typeof req.query.id === 'string' || req.query.id instanceof String) {
+        query = { _id: { $in: [ ObjectId(req.query.id) ] } }
+    } else if (req.query.id instanceof Array) {
+        query = { _id: { $in: req.query.id.map(i => ObjectId(i)) }}
+    }
+    let results = await User.collection.find(query)
         .toArray();
     res.set('Access-Control-Expose-Headers', 'X-Total-Count');
     res.set('X-Total-Count', results.length);
     res.send(results).status(200);
 });
 
+// Get a specific users
+router.get("/:id", async (req, res) => {
+    let query = { _id: ObjectId(req.params.id) };
+    let result = await User.findOne(query);
+    if (!result) {
+        res.send("Not found!").status(404);
+    } else {
+        res.send(result).status(200);
+    }
+});
+
 // Add a new user to the collection
 router.post("/", async (req, res) => {
-    console.info(`${req.method} ${req.url}`);
     let newUser = new User(req.body);
     await newUser.save()
         .then(user => {
@@ -29,7 +44,6 @@ router.post("/", async (req, res) => {
 
 // Update a specific user
 router.put("/:id", async (req, res) => {
-    console.info(`${req.method} ${req.url}`);
     const query = { _id: ObjectId(req.params.id) };
     let user = await User.findOne(query);
 
@@ -51,7 +65,6 @@ router.put("/:id", async (req, res) => {
 
 // Delete user
 router.delete("/:id", async (req, res) => {
-    console.info(`${req.method} ${req.url}`);
     const query = { _id: ObjectId(req.params.id) };
 
     let result = await User.deleteOne(query);
