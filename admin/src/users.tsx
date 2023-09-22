@@ -1,16 +1,8 @@
 import { useMediaQuery, Theme } from "@mui/material";
 import {
-    List,
-    SimpleList,
-    Datagrid,
-    TextField,
-    EmailField,
-    ReferenceField,
-    EditButton,
-    Edit,
-    ReferenceInput,
-    SimpleForm,
-    TextInput
+    List, SimpleList, Datagrid, TextField, EmailField, ReferenceField, EditButton,
+    Edit, ReferenceInput, SimpleForm, TextInput,
+    Show, SimpleShowLayout
 } from "react-admin";
 
 export const UserList = () => {
@@ -49,4 +41,18 @@ export const UserEdit = () => (
             <TextInput source="phone" />
         </SimpleForm>
     </Edit>
-)
+);
+
+export const UserShow = () => (
+    <Show>
+        <SimpleShowLayout>
+            <TextField source="id" />
+            <TextField source="firstname" />
+            <TextField source="lastname" />
+            <EmailField source="email" />
+            <EmailField source="address" />
+            <TextField source="phone" />
+            <ReferenceField source="resume_id" reference="resumes" link="show" />
+        </SimpleShowLayout>
+    </Show>
+);

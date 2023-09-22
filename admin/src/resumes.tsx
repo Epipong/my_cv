@@ -1,5 +1,9 @@
 import { useMediaQuery, Theme } from "@mui/material";
-import { List, SimpleList, Datagrid, TextField, EmailField, EditButton } from "react-admin";
+import {
+    List, SimpleList, Datagrid, TextField, EmailField, EditButton,
+    Show, SimpleShowLayout, ArrayField,
+    Edit, LongForm, TextInput, ArrayInput, SimpleFormIterator
+} from "react-admin";
 import MyUrlField from './MyUrlField';
 
 export const ResumeList = () => {
@@ -27,3 +31,88 @@ export const ResumeList = () => {
         </List>
     );
 };
+
+export const ResumeShow = () => (
+    <Show>
+        <SimpleShowLayout>
+            <TextField source="contact.firstname" />
+            <ArrayField source="skills">
+                <Datagrid>
+                    <TextField source="content" />
+                </Datagrid>
+            </ArrayField>
+            <ArrayField source="languages">
+                <Datagrid>
+                    <TextField source="name" />
+                    <TextField source="level" />
+                </Datagrid>
+            </ArrayField>
+            <ArrayField source="experiences">
+                <Datagrid>
+                    <TextField source="period" />
+                    <TextField source="company" />
+                    <TextField source="mission" />
+                    <TextField source="role" />
+                    <TextField source="content" />
+                    <TextField source="stack" />
+                </Datagrid>
+            </ArrayField>
+            <ArrayField source="formations">
+                <Datagrid>
+                    <TextField source="period" />
+                    <TextField source="title" />
+                    <TextField source="school" />
+                </Datagrid>
+            </ArrayField>
+            <TextField source="hobbies.text" />
+        </SimpleShowLayout>
+    </Show>
+);
+
+export const ResumeEdit = () => (
+    <Edit>
+        <LongForm>
+            <LongForm.Section label="Contact">
+                <TextInput source="contact.firstname" />
+                <TextInput source="contact.lastname" />
+                <TextInput source="contact.title" />
+                <TextInput source="contact.phone" />
+                <TextInput source="contact.email" />
+                <TextInput source="contact.address" />
+                <TextInput source="contact.website.url" />
+                <TextInput source="contact.website.text" />
+            </LongForm.Section>
+            <LongForm.Section label="Skills">
+                <ArrayInput source="skills" label="">
+                    <SimpleFormIterator>
+                        <TextInput source="content" />
+                    </SimpleFormIterator>
+                </ArrayInput>
+            </LongForm.Section>
+            <ArrayInput source="languages">
+                <SimpleFormIterator>
+                    <TextInput source="name" />
+                    <TextInput source="level" />
+                </SimpleFormIterator>
+            </ArrayInput>
+            <ArrayInput source="experiences">
+                <SimpleFormIterator>
+                    <TextInput source="period" />
+                    <TextInput source="company" />
+                    <TextInput source="mission" />
+                    <TextInput source="role" />
+                    <TextInput source="body" />
+                    <TextInput source="stack" />
+                </SimpleFormIterator>
+            </ArrayInput>
+            <ArrayInput source="formations">
+                <SimpleFormIterator>
+                    <TextInput source="period" />
+                    <TextInput source="title" />
+                    <TextInput source="school" />
+                </SimpleFormIterator>
+            </ArrayInput>
+            <TextInput source="hobbies.text" />
+        </LongForm>
+    </Edit>
+);
