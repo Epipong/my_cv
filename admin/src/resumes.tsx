@@ -2,7 +2,7 @@ import { useMediaQuery, Theme } from "@mui/material";
 import {
     List, SimpleList, Datagrid, TextField, EmailField, EditButton,
     Show, SimpleShowLayout, ArrayField,
-    Edit, LongForm, TextInput, ArrayInput, SimpleFormIterator
+    Edit, SimpleForm, TextInput, ArrayInput, SimpleFormIterator
 } from "react-admin";
 import MyUrlField from './MyUrlField';
 
@@ -71,24 +71,20 @@ export const ResumeShow = () => (
 
 export const ResumeEdit = () => (
     <Edit>
-        <LongForm>
-            <LongForm.Section label="Contact">
-                <TextInput source="contact.firstname" />
-                <TextInput source="contact.lastname" />
-                <TextInput source="contact.title" />
-                <TextInput source="contact.phone" />
-                <TextInput source="contact.email" />
-                <TextInput source="contact.address" />
-                <TextInput source="contact.website.url" />
-                <TextInput source="contact.website.text" />
-            </LongForm.Section>
-            <LongForm.Section label="Skills">
-                <ArrayInput source="skills" label="">
-                    <SimpleFormIterator>
-                        <TextInput source="content" />
-                    </SimpleFormIterator>
-                </ArrayInput>
-            </LongForm.Section>
+        <SimpleForm>
+            <TextInput source="contact.firstname" />
+            <TextInput source="contact.lastname" />
+            <TextInput source="contact.title" />
+            <TextInput source="contact.phone" />
+            <TextInput source="contact.email" />
+            <TextInput source="contact.address" />
+            <TextInput source="contact.website.url" />
+            <TextInput source="contact.website.text" />
+            <ArrayInput source="skills">
+                <SimpleFormIterator>
+                    <TextInput source="content" />
+                </SimpleFormIterator>
+            </ArrayInput>
             <ArrayInput source="languages">
                 <SimpleFormIterator>
                     <TextInput source="name" />
@@ -113,6 +109,6 @@ export const ResumeEdit = () => (
                 </SimpleFormIterator>
             </ArrayInput>
             <TextInput source="hobbies.text" />
-        </LongForm>
+        </SimpleForm>
     </Edit>
 );
