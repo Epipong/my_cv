@@ -3,7 +3,7 @@ import Grid from '@mui/material/Grid';
 import {
     List, SimpleList, Datagrid, TextField, EmailField, ReferenceField, EditButton,
     Edit, ReferenceInput, SimpleForm, TextInput,
-    Show, SimpleShowLayout
+    Show, SimpleShowLayout, Create
 } from "react-admin";
 
 export const UserList = () => {
@@ -31,6 +31,20 @@ export const UserList = () => {
     );
 };
 
+export const UserShow = () => (
+    <Show>
+        <SimpleShowLayout>
+            <TextField source="id" />
+            <TextField source="firstname" label="First name" />
+            <TextField source="lastname" label="Last name" />
+            <EmailField source="email" />
+            <TextField source="address" />
+            <TextField source="phone" />
+            <ReferenceField source="resume_id" reference="resumes" link="show" />
+        </SimpleShowLayout>
+    </Show>
+);
+
 export const UserEdit = () => (
     <Edit>
         <SimpleForm>
@@ -50,16 +64,20 @@ export const UserEdit = () => (
     </Edit>
 );
 
-export const UserShow = () => (
-    <Show>
-        <SimpleShowLayout>
-            <TextField source="id" />
-            <TextField source="firstname" label="First name" />
-            <TextField source="lastname" label="Last name" />
-            <EmailField source="email" />
-            <TextField source="address" />
-            <TextField source="phone" />
-            <ReferenceField source="resume_id" reference="resumes" link="show" />
-        </SimpleShowLayout>
-    </Show>
+export const UserCreate = () => (
+    <Create>
+        <SimpleForm>
+            <Grid container spacing={2}>
+                <Grid item xs={2}>
+                    <TextInput source="firstname" label="First name" />
+                </Grid>
+                <Grid item xs={2}>
+                    <TextInput source="lastname" label="Last name" />
+                </Grid>
+            </Grid>
+            <TextInput source="address" />
+            <TextInput source="email" />
+            <TextInput source="phone" />
+        </SimpleForm>
+    </Create>
 );
