@@ -1,4 +1,5 @@
 import { useMediaQuery, Theme } from "@mui/material";
+import Grid from '@mui/material/Grid';
 import {
     List, SimpleList, Datagrid, TextField, EmailField, ReferenceField, EditButton,
     Edit, ReferenceInput, SimpleForm, TextInput,
@@ -34,8 +35,14 @@ export const UserEdit = () => (
     <Edit>
         <SimpleForm>
             <ReferenceInput source="resume_id" reference="resumes" link="show" />
-            <TextInput source="firstname" />
-            <TextInput source="lastname" />
+            <Grid container spacing={2}>
+                <Grid item xs={2}>
+                    <TextInput source="firstname" label="First name" />
+                </Grid>
+                <Grid item xs={2}>
+                    <TextInput source="lastname" label="Last name" />
+                </Grid>
+            </Grid>
             <TextInput source="address" />
             <TextInput source="email" />
             <TextInput source="phone" />
@@ -47,10 +54,10 @@ export const UserShow = () => (
     <Show>
         <SimpleShowLayout>
             <TextField source="id" />
-            <TextField source="firstname" />
-            <TextField source="lastname" />
+            <TextField source="firstname" label="First name" />
+            <TextField source="lastname" label="Last name" />
             <EmailField source="email" />
-            <EmailField source="address" />
+            <TextField source="address" />
             <TextField source="phone" />
             <ReferenceField source="resume_id" reference="resumes" link="show" />
         </SimpleShowLayout>

@@ -27,6 +27,13 @@ router.post("/", async (req, res) => {
     res.send(result).status(204);
 });
 
+// Update resume
+router.put("/:id", async (req, res) => {
+    let query = { _id: ObjectId(req.params.id) };
+    const result = await Resume.findOneAndUpdate(query, req.body);
+    res.send(result).status(204);
+})
+
 // Get resume by id
 router.get("/:id", async (req, res) => {
     let query = { _id: ObjectId(req.params.id) };
