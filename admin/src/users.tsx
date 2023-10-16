@@ -3,8 +3,14 @@ import Grid from '@mui/material/Grid';
 import {
     List, SimpleList, Datagrid, TextField, EmailField, ReferenceField, EditButton,
     Edit, ReferenceInput, SimpleForm, TextInput,
-    Show, SimpleShowLayout, Create
+    Show, SimpleShowLayout, Create,
+    useRecordContext
 } from "react-admin";
+
+export const UserTitle = () => {
+    const record = useRecordContext();
+    return <span>User {record.firstname} {record.lastname}</span>
+}
 
 export const UserList = () => {
     const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
@@ -32,7 +38,7 @@ export const UserList = () => {
 };
 
 export const UserShow = () => (
-    <Show>
+    <Show title={<UserTitle/>}>
         <SimpleShowLayout>
             <TextField source="id" />
             <TextField source="firstname" label="First name" />
@@ -46,7 +52,7 @@ export const UserShow = () => (
 );
 
 export const UserEdit = () => (
-    <Edit>
+    <Edit title={<UserTitle/>}>
         <SimpleForm>
             <ReferenceInput source="resume_id" reference="resumes" link="show" />
             <Grid container spacing={2}>

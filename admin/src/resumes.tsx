@@ -4,7 +4,7 @@ import {
     List, SimpleList, Datagrid, TextField, EmailField, EditButton,
     Show, SimpleShowLayout, ArrayField,
     Edit, TabbedForm, TextInput, ArrayInput, SimpleFormIterator,
-    Create, ReferenceInput
+    Create
 } from "react-admin";
 import MyUrlField from './MyUrlField';
 
