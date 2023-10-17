@@ -1,4 +1,5 @@
 import { useMediaQuery, Theme } from "@mui/material";
+import UserIcon from "@mui/icons-material/Group";
 import Grid from '@mui/material/Grid';
 import {
     List, SimpleList, Datagrid, TextField, EmailField, ReferenceField, EditButton,
@@ -6,6 +7,11 @@ import {
     Show, SimpleShowLayout, Create,
     useRecordContext
 } from "react-admin";
+
+const userFilters = [
+    <TextInput source="firstname" label="Search" alwaysOn />,
+    // <ReferenceInput source="resume_id" label="Resume" reference="resumes" />
+]
 
 export const UserTitle = () => {
     const record = useRecordContext();
@@ -15,7 +21,7 @@ export const UserTitle = () => {
 export const UserList = () => {
     const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
     return (
-        <List>
+        <List filters={userFilters}>
             {isSmall ? (
                 <SimpleList
                     primaryText={record => `${record.firstname} ${record.lastname}`}
